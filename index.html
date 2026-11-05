@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>복이네 톡방 · 채팅 연습</title>
+<style>
+:root{--bg:#fbf3e4;--card:#fff;--ink:#3a2a1c;--sub:#7a6450;--pri:#2f8f6f;--mine:#cdebb8;--their:#fff;--line:#e6d5b8;--chat:#efe3cc;--hl:#ffe9a8;--warn:#d9534f;--ok:#2f7a4f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#241c16;--card:#332920;--ink:#fff1dc;--sub:#cdb89c;--pri:#4fb78f;--mine:#3f6a3a;--their:#3d3329;--line:#54443a;--chat:#2c231c;--hl:#6b5a2a;--warn:#ff8a85;--ok:#7fd9a5}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#241c16;--card:#332920;--ink:#fff1dc;--sub:#cdb89c;--pri:#4fb78f;--mine:#3f6a3a;--their:#3d3329;--line:#54443a;--chat:#2c231c;--hl:#6b5a2a;--warn:#ff8a85;--ok:#7fd9a5}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;font-size:20px;line-height:1.4}
+.scr{height:100%;display:flex;flex-direction:column}.scr[hidden]{display:none}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:4px solid #2f7fff;outline-offset:2px}
+.top{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--card);border-bottom:2px solid var(--line)}
+.top h2{margin:0;font-size:24px;flex:1}
+.back{min-height:52px;min-width:72px;border:2px solid var(--line);background:var(--bg);border-radius:14px;font-size:20px;font-weight:700}
+.home{flex:1;overflow:auto;padding:24px 18px;display:flex;flex-direction:column;gap:16px;max-width:560px;width:100%;margin:0 auto}
+.home h1{font-size:36px;margin:8px 0 0;line-height:1.2}.home p{margin:0;color:var(--sub)}
+.big{display:flex;align-items:center;gap:14px;text-align:left;min-height:104px;padding:16px;border-radius:20px;border:3px solid var(--ink);background:var(--card);font-size:26px;font-weight:700}
+.big small{display:block;font-size:18px;font-weight:400;color:var(--sub)}
+.big .ic{font-size:48px}.big.a{background:var(--pri);color:#fff;border-color:var(--ink)}.big.a small{color:#fff}
+.share{min-height:56px;border-radius:14px;border:2px dashed var(--sub);background:none;font-size:19px}
+.list{flex:1;overflow:auto}
+.row{display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;border:0;border-bottom:1px solid var(--line);background:var(--card);text-align:left;min-height:92px}
+.av{width:64px;height:64px;border-radius:24px;display:grid;place-items:center;font-size:36px;flex:none}
+.row b{font-size:26px;display:block}.row span.p{color:var(--sub);font-size:18px}
+.row .bd{margin-left:auto;background:var(--warn);color:#fff;border-radius:16px;min-width:32px;padding:2px 10px;text-align:center;font-weight:700}
+#log{flex:1;overflow:auto;background:var(--chat);padding:14px 12px;display:flex;flex-direction:column;gap:12px}
+.m{display:flex;gap:8px;align-items:flex-end;max-width:92%}.m.me{align-self:flex-end;flex-direction:row-reverse}
+.m .av{width:46px;height:46px;font-size:26px;border-radius:18px;align-self:flex-start}
+.bub{background:var(--their);padding:10px 14px;border-radius:6px 18px 18px 18px;font-size:22px;word-break:break-all;border:1px solid var(--line)}
+.me .bub{background:var(--mine);border-radius:18px 6px 18px 18px}
+.m time{font-size:14px;color:var(--sub);white-space:nowrap}
+.nm{font-size:16px;color:var(--sub);margin:0 0 2px 54px}
+.tip{padding:8px 14px;background:var(--hl);font-size:19px;font-weight:700;text-align:center}
+.chips,.emo{display:flex;gap:8px;overflow-x:auto;padding:8px 10px;background:var(--card)}
+.chips button,.emo button{flex:none;min-height:50px;padding:0 16px;border-radius:25px;border:2px solid var(--line);background:var(--bg);font-size:20px}
+.emo button{font-size:28px;padding:0 12px}
+.inp{display:flex;gap:8px;padding:8px 10px 10px;background:var(--card);border-top:2px solid var(--line)}
+.inp input{flex:1;min-width:0;min-height:60px;border:3px solid var(--ink);border-radius:16px;padding:0 14px;font-size:22px;background:var(--bg);color:var(--ink)}
+.send{min-width:96px;min-height:60px;border-radius:16px;border:3px solid var(--ink);background:var(--pri);color:#fff;font-size:22px;font-weight:700}
+.solo{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:14px;max-width:560px;width:100%;margin:0 auto}
+.tgt{background:var(--card);border:3px solid var(--line);border-radius:20px;padding:18px;font-size:32px;line-height:1.5;font-weight:700;word-break:keep-all}
+.tgt .ok{color:var(--ok)}.tgt .bad{color:var(--warn);text-decoration:underline wavy}.tgt .cur{background:var(--hl);border-radius:4px}
+.solo .inp{padding:0;border:0;background:none}
+.ok2{background:var(--card);border:3px solid var(--ok);border-radius:20px;padding:16px;text-align:center;font-size:26px;font-weight:700}
+.ok2[hidden]{display:none}
+.mini{min-height:56px;border-radius:14px;border:2px solid var(--ink);background:var(--card);font-size:20px;font-weight:700;padding:0 14px}
+.toast{position:fixed;left:50%;top:22%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:16px 22px;border-radius:18px;font-size:24px;font-weight:700;z-index:5;text-align:center}
+.toast[hidden]{display:none}
+</style></head><body>
+
+<section id="home" class="scr"><div class="home">
+<h1>💬 복이네 톡방<br>채팅 연습</h1>
+<p>눌러 보고, 써 보고, 보내 보세요.<br>틀려도 괜찮고, 진짜로 전달되지 않아요.</p>
+<button class="big a" id="goFam"><span class="ic">👨‍👩‍👧</span><span>가족과 톡 연습<small>가족을 골라 대화해 봐요</small></span></button>
+<button class="big" id="goSolo"><span class="ic">✍️</span><span>나 혼자 연습<small>좋은 글을 따라 써 봐요</small></span></button>
+<button class="share" id="shareBtn">🔗 이 연습 링크 보내기</button>
+</div></section>
+
+<section id="fam" class="scr" hidden>
+<div class="top"><button class="back" data-home>← 처음</button><h2>누구에게 보내 볼까요?</h2></div>
+<div class="list" id="famList"></div></section>
+
+<section id="chat" class="scr" hidden>
+<div class="top"><button class="back" id="chatBack">← 목록</button><h2 id="chatName"></h2></div>
+<div id="log" aria-live="polite"></div>
+<div class="tip" id="tip"></div>
+<div class="emo" id="emo"></div>
+<div class="inp"><input id="msg" type="text" enterkeyhint="send" autocomplete="off" placeholder="여기를 눌러 글을 써요" aria-label="메시지 입력"><button class="send" id="sendBtn">보내기</button></div>
+</section>
+
+<section id="solo" class="scr" hidden>
+<div class="top"><button class="back" data-home>← 처음</button><h2>나 혼자 연습</h2></div>
+<div class="solo">
+<p style="margin:0;color:var(--sub)">아래 글을 보고 그대로 따라 써 보세요. 맞으면 <b style="color:var(--ok)">초록</b>색이 돼요.</p>
+<div class="tgt" id="tgt"></div>
+<div style="display:flex;gap:8px"><button class="mini" id="say">🔊 읽어 주기</button><button class="mini" id="skip">다른 글</button></div>
+<div class="inp"><input id="sin" type="text" autocomplete="off" placeholder="여기에 따라 써요" aria-label="따라 쓰기"><button class="send" id="sdone">다 썼어요</button></div>
+<div class="tip" id="stip" style="border-radius:12px">아래 하얀 칸을 눌러 써 보세요</div>
+<div class="ok2" id="win" hidden>🎉 잘 쓰셨어요!<br><span id="cnt" style="font-size:20px;font-weight:400"></span><br><button class="send" id="nxt" style="margin-top:10px;padding:0 20px">다음 글 쓰기</button></div>
+</div></section>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+var $=function(s){return document.querySelector(s)};
+function show(id){["home","fam","chat","solo"].forEach(function(k){$("#"+k).hidden=k!==id})}
+function toast(t){var e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){e.hidden=true},2200)}
+var P=[
+{n:"우리 아들",e:"👨",c:"#9cc9ea",pv:"식사는 하셨어요?",hi:["식사는 하셨어요? 오늘 날씨가 좋네요 ☀️"],fb:"네, 잘 받았어요! 또 보내 주세요 😊"},
+{n:"우리 딸",e:"👩",c:"#f4b6c8",pv:"오늘 뭐 하셨어요?",hi:["오늘 뭐 하셨어요? 저는 퇴근하고 전화드릴게요 📞"],fb:"네~ 잘 받았어요! 그럼 이따 또 연락드릴게요 💕"},
+{n:"귀염둥이 손주",e:"🧒",c:"#ffd98a",pv:"보고 싶어요!",hi:["보고 싶어요! 이번 주말에 놀러 가도 돼요? 😆"],fb:"우와~ 최고예요! 또 보내 주세요 😆"},
+{n:"오랜 친구",e:"🧑‍🦳",c:"#b9dcb0",pv:"요즘 어떻게 지내?",hi:["요즘 어떻게 지내? 한동안 연락을 못 했네 🙂"],fb:"허허, 잘 받았네. 또 연락하세."}];
+var K=[[/밥|식사|먹|점심|저녁/,"맛있게 드세요! 저도 곧 먹을게요 🍚"],[/사랑/,"저도 사랑해요 💕"],[/고마|감사/,"별말씀을요, 제가 더 고마워요 🙏"],[/안녕|잘 ?지|보고/,"저도 보고 싶어요! 건강하게 잘 지내세요 😊"],[/아프|병원|약/,"어디 불편하세요? 병원 꼭 다녀오세요."],[/[ㅋㅎ]/,"하하, 웃으시니 저도 좋아요 😄"]];
+var cur=null,sent=0;
+function hhmm(){var d=new Date(),h=d.getHours(),m=d.getMinutes();return(h<12?"오전 ":"오후 ")+(h%12||12)+":"+(m<10?"0":"")+m}
+function add(t,me){var l=$("#log"),w=document.createElement("div");
+ if(!me){var n=document.createElement("div");n.className="nm";n.textContent=cur.n;l.appendChild(n)}
+ w.className="m"+(me?" me":"");
+ var a=document.createElement("div");a.className="av";a.style.background=cur.c;a.textContent=cur.e;if(!me)w.appendChild(a);
+ var b=document.createElement("div");b.className="bub";b.textContent=t;w.appendChild(b);
+ var tm=document.createElement("time");tm.textContent=hhmm();w.appendChild(tm);
+ l.appendChild(w);l.scrollTop=l.scrollHeight}
+function tip(){$("#tip").textContent=$("#msg").value.trim()?"② 다 쓰셨으면 초록색 ‘보내기’를 눌러요":"① 아래 하얀 칸을 눌러 글을 써 보세요"}
+function reply(v){var r=cur.fb;K.some(function(k){if(k[0].test(v)){r=k[1];return true}});
+ $("#tip").textContent="상대방이 글을 쓰고 있어요…";
+ setTimeout(function(){add(r,false);tip();if(sent===3)toast("🎉 벌써 3번 보내셨어요!")},1100)}
+function send(){var i=$("#msg"),v=i.value.trim();if(!v){toast("글을 먼저 써 주세요");i.focus();return}
+ add(v,true);i.value="";sent++;reply(v);i.focus()}
+function openChat(p){cur=p;sent=0;$("#chatName").textContent=p.n;$("#log").innerHTML="";$("#msg").value="";show("chat");tip();
+ setTimeout(function(){add(p.hi[0],false)},500)}
+var fl=$("#famList");P.forEach(function(p){var b=document.createElement("button");b.className="row";
+ b.innerHTML='<span class="av" style="background:'+p.c+'">'+p.e+'</span><span><b>'+p.n+'</b><span class="p">'+p.pv+'</span></span><span class="bd">1</span>';
+ b.onclick=function(){openChat(p)};fl.appendChild(b)});
+["😊","❤️","👍","🙏","🌸"].forEach(function(t){var b=document.createElement("button");b.textContent=t;b.setAttribute("aria-label","이모티콘 "+t);
+ b.onclick=function(){var i=$("#msg");i.value+=t;i.focus();tip()};$("#emo").appendChild(b)});
+$("#msg").addEventListener("input",tip);
+$("#msg").addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.isComposing)send()});
+$("#sendBtn").onclick=send;
+$("#chatBack").onclick=function(){show("fam")};
+$("#goFam").onclick=function(){show("fam")};
+document.querySelectorAll("[data-home]").forEach(function(b){b.onclick=function(){show("home")}});
+$("#shareBtn").onclick=function(){var u=location.href;
+ if(navigator.share){navigator.share({title:"복이네 톡방 채팅 연습",url:u}).catch(function(){})}
+ else{try{navigator.clipboard.writeText(u);toast("링크를 복사했어요")}catch(e){toast("주소창의 링크를 보내 주세요")}}};
+
+var Q=["오늘도 건강하고 행복한 하루 보내세요","늘 곁에 있어 주셔서 고맙습니다","사랑하는 우리 가족 모두 건강하세요","웃는 얼굴이 가장 예쁜 꽃이에요","천천히 가도 괜찮아요 잘하고 계세요","좋은 아침이에요 따뜻한 하루 되세요","당신 덕분에 오늘도 힘이 납니다","감사한 마음을 전합니다 항상 건강하세요"];
+var qi=-1,done=0,comp=false,order=Q.slice().sort(function(){return Math.random()-.5});
+function nz(s){return s.replace(/\s/g,"")}
+function paint(){var t=order[qi],v=nz($("#sin").value),k=0,h="";
+ for(var i=0;i<t.length;i++){var c=t[i];if(/\s/.test(c)){h+=" ";continue}
+  var cl="";if(k<v.length){cl=(v[k]===c||(comp&&k===v.length-1))?"ok":"bad"}else if(k===v.length)cl="cur";
+  h+='<span class="'+cl+'">'+c+"</span>";k++}
+ $("#tgt").innerHTML=h;
+ $("#stip").textContent=v?"다 쓰셨으면 ‘다 썼어요’를 눌러요":"아래 하얀 칸을 눌러 써 보세요"}
+function nextQ(){qi=(qi+1)%order.length;$("#sin").value="";$("#win").hidden=true;paint()}
+$("#goSolo").onclick=function(){show("solo");if(qi<0)nextQ();else paint()};
+$("#sin").addEventListener("compositionstart",function(){comp=true});
+$("#sin").addEventListener("compositionend",function(){comp=false;paint()});
+$("#sin").addEventListener("input",paint);
+$("#sdone").onclick=function(){var v=nz($("#sin").value),t=nz(order[qi]);
+ if(!v){toast("글을 먼저 써 주세요");$("#sin").focus();return}
+ if(v===t){done++;$("#cnt").textContent="지금까지 "+done+"개 썼어요";$("#win").hidden=false;$("#win").scrollIntoView({block:"nearest"})}
+ else toast("조금 달라요. 빨간 글자를 고쳐 보세요")};
+$("#nxt").onclick=nextQ;$("#skip").onclick=nextQ;
+$("#say").onclick=function(){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(order[qi]);u.lang="ko-KR";u.rate=.85;speechSynthesis.speak(u)}catch(e){}};
+</script></body></html>

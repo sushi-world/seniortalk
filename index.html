@@ -137,7 +137,10 @@ function inst(p){pf=p;$("#mt").textContent=p==="ios"?"아이폰 설치 방법":"
 var dp=null;window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();dp=e});
 window.addEventListener("appinstalled",function(){$("#instBtn").hidden=true;toast("설치됐어요! 홈 화면을 확인해 보세요")});
 if(window.matchMedia("(display-mode: standalone)").matches||navigator.standalone)$("#instBtn").hidden=true;
-$("#instBtn").onclick=function(){if(dp){dp.prompt();dp.userChoice.then(function(){dp=null})}else inst(pf)};
+var UA=navigator.userAgent,KK=/KAKAOTALK/i.test(UA),AN=/Android/i.test(UA);
+function ext(){var u=location.href;location.href=AN?"intent://"+u.replace(/^https?:\/\//,"")+"#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url="+encodeURIComponent(u)+";end":"kakaotalk://web/openExternal?url="+encodeURIComponent(u)}
+$("#instBtn").onclick=function(){if(KK)ext();else if(dp){dp.prompt();dp.userChoice.then(function(){dp=null})}else inst(pf)};
+try{if(KK&&!sessionStorage.getItem("ext")){sessionStorage.setItem("ext","1");ext()}}catch(e){}
 if("serviceWorker" in navigator)window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){})});
 $("#mo").onclick=function(){inst(pf==="ios"?"and":"ios")};
 $("#mc").onclick=function(){$("#mod").hidden=true};

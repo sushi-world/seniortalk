@@ -1,5 +1,5 @@
 // 내용을 고쳐 다시 올릴 때는 아래 버전 숫자를 올려 주세요 (v1 -> v2)
-const V = "talk-v2";
+const V = "talk-v3";
 const FILES = ["/", "/index.html", "/manifest.json", "/icon-192.png", "/icon-512.png", "/icon-maskable-512.png", "/apple-touch-icon.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(V).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
